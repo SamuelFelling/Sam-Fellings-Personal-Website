@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome | Interactive Experience</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --text-color: #2c3e50;
+            --background-color: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--background-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-container {
+            text-align: center;
+            z-index: 2;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            color: white;
+            margin: 0;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .welcome-text {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease 0.3s forwards;
+        }
+
+        .interactive-button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease 0.6s forwards;
+        }
+
+        .interactive-button:hover {
+            background: white;
+            color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(100px, 100px) rotate(180deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mouse-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            .welcome-text {
+                font-size: 1.2rem;
+            }
+            .mouse-cursor, .cursor-dot {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mouse-cursor"></div>
+    <div class="cursor-dot"></div>
+    
+    <section class="hero-section">
+        <div class="floating-shapes">
+            <!-- Shapes will be added by JavaScript -->
+        </div>
+        <div class="content-container">
+            <h1>Welcome to My World</h1>
+            <p class="welcome-text">Experience the magic of interactive web design</p>
+            <button class="interactive-button">Explore More</button>
+        </div>
+    </section>
+
+    <script>
+        // Custom cursor
+        const cursor = document.querySelector('.mouse-cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+        });
+
+        // Generate floating shapes
+        const shapesContainer = document.querySelector('.floating-shapes');
+        for (let i = 0; i < 15; i++) {
+            const shape = document.createElement('div');
+            shape.classList.add('shape');
+            shape.style.width = Math.random() * 100 + 20 + 'px';
+            shape.style.height = shape.style.width;
+            shape.style.left = Math.random() * 100 + 'vw';
+            shape.style.top = Math.random() * 100 + 'vh';
+            shape.style.animationDelay = Math.random() * 5 + 's';
+            shape.style.animationDuration = Math.random() * 10 + 15 + 's';
+            shapesContainer.appendChild(shape);
+        }
+
+        // Interactive button effects
+        const button = document.querySelector('.interactive-button');
+        button.addEventListener('mouseover', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+            cursorDot.style.transform = 'translate(-50%, -50%) scale(0.5)';
+        });
+
+        button.addEventListener('mouseout', () => {
+            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+            cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+
+        // Add click animation to button
+        button.addEventListener('click', function(e) {
+            let ripple = document.createElement('div');
+            this.appendChild(ripple);
+            let x = e.clientX - e.target.offsetLeft;
+            let y = e.clientY - e.target.offsetTop;
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            setTimeout(() => {
+                ripple.remove();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
